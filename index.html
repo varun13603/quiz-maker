@@ -10,10 +10,11 @@
     <!-- GitHub Pages SPA redirect handling -->
     <script type="text/javascript">
       (function(l) {
-        // Handle hash-based routing from 404.html
-        if (l.hash.startsWith('#/')) {
-          var path = l.hash.slice(2); // Remove #/
-          window.history.replaceState(null, null, l.pathname + path);
+        var redirectPath = sessionStorage.getItem('redirectPath');
+        if (redirectPath) {
+          sessionStorage.removeItem('redirectPath');
+          // Use the full path stored, which should include the base path
+          window.history.replaceState(null, null, redirectPath);
         }
       }(window.location))
     </script>
