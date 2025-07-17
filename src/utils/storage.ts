@@ -70,23 +70,14 @@ export const getAttemptsByQuizId = (quizId: string): QuizAttempt[] => {
 };
 
 export const generateShareableLink = (quizId: string): string => {
-  const baseUrl = window.location.origin;
-  // For GitHub Pages, we need to include the repository name in the path
-  // Check if we're on GitHub Pages by looking at the hostname
-  const isGitHubPages = window.location.hostname.includes('github.io');
-  const basePath = isGitHubPages ? '/quiz-maker' : '';
-  const fullUrl = `${baseUrl}${basePath}/quiz/${quizId}`;
-  
-  // Debug logging (remove in production)
-  console.log('Share URL Debug:', {
-    baseUrl,
-    isGitHubPages,
-    basePath,
-    fullUrl,
-    hostname: window.location.hostname
-  });
-  
-  return fullUrl;
+  // Check if we're on GitHub Pages
+  if (window.location.hostname === 'varun13603.github.io') {
+    // Hardcode the GitHub Pages URL to avoid any caching issues
+    return `https://varun13603.github.io/quiz-maker/quiz/${quizId}`;
+  } else {
+    // For local development
+    return `${window.location.origin}/quiz/${quizId}`;
+  }
 };
 
 export const copyToClipboard = async (text: string): Promise<boolean> => {
