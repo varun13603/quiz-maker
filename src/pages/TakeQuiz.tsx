@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, XCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Quiz, QuizResult, QuizAttempt } from '../types';
-import { getQuizById, saveAttempt, getTempQuiz, clearTempQuiz } from '../utils/storage';
+import { getQuizById, saveAttempt, getTempQuiz } from '../utils/storage';
 import { calculateScore, formatTime } from '../utils/helpers';
 import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
@@ -43,11 +43,7 @@ const TakeQuiz = () => {
         navigate('/');
       }
     }
-    
-    // Clean up the temporary quiz from session storage when the component unmounts
-    return () => {
-      clearTempQuiz();
-    };
+    // Do NOT clearTempQuiz() on unmount here!
   }, [id, navigate]);
 
   useEffect(() => {
