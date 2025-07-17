@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
 import Header from './components/Header';
 import Home from './pages/Home';
 import CreateQuiz from './pages/CreateQuiz';
@@ -9,6 +10,16 @@ import QuizResults from './pages/QuizResults';
 import QuizDashboard from './pages/QuizDashboard';
 
 function App() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const path = params.get('p');
+    if (path) {
+      // Construct the full path including the basename for react-router
+      const newPath = `/quiz-maker${path}`;
+      window.history.replaceState(null, '', newPath);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />

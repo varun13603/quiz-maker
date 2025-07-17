@@ -9,14 +9,7 @@
     
     <!-- GitHub Pages SPA redirect handling -->
     <script type="text/javascript">
-      (function(l) {
-        var redirectPath = sessionStorage.getItem('redirectPath');
-        if (redirectPath) {
-          sessionStorage.removeItem('redirectPath');
-          // Use the full path stored, which should include the base path
-          window.history.replaceState(null, null, redirectPath);
-        }
-      }(window.location))
+      // This script is no longer needed with the new 404.html strategy.
     </script>
   </head>
   <body>
