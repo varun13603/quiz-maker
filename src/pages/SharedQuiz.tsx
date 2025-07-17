@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { decodeQuizData, saveTempQuiz } from '../utils/storage';
+import { decodeQuizData, saveTempQuiz, saveQuiz } from '../utils/storage';
 
 const SharedQuiz = () => {
   const [params] = useSearchParams();
@@ -19,8 +19,11 @@ const SharedQuiz = () => {
       navigate('/');
       return;
     }
+    // Persist quiz for reuse
     saveTempQuiz(quiz);
-    navigate(`/quiz/${quiz.id}`);
+    saveQuiz(quiz);
+    // Redirect to direct quiz route with embedded data
+    navigate(`/quiz/${quiz.id}?data=${params.get('data')}`);
   }, [params, navigate]);
 
   return (

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Clock, CheckCircle, XCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Quiz, QuizResult, QuizAttempt } from '../types';
-import { getQuizById, saveAttempt, getTempQuiz } from '../utils/storage';
+import { getQuizById, saveAttempt, getTempQuiz, saveQuiz } from '../utils/storage';
+import { decodeQuizData } from '../utils/storage';
 import { calculateScore, formatTime } from '../utils/helpers';
 import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
@@ -10,6 +11,7 @@ import toast from 'react-hot-toast';
 const TakeQuiz = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -20,6 +22,21 @@ const TakeQuiz = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    // Check for embedded shared data in URL
+    const searchParams = new URLSearchParams(location.search);
+    const dataParam = searchParams.get('data');
+    if (dataParam) {
+      const decodedQuiz = decodeQuizData(dataParam);
+      if (decodedQuiz && decodedQuiz.id === id) {
+        saveQuiz(decodedQuiz);
+        setQuiz(decodedQuiz);
+        setAnswers(new Array(decodedQuiz.questions.length).fill(-1));
+        if (decodedQuiz.timeLimit) {
+          setTimeLeft(decodedQuiz.timeLimit * 60);
+        }
+        return;
+      }
+    }
     if (id) {
       // First, try to get the quiz from local storage (for quizzes created by the user)
       let foundQuiz = getQuizById(id);
@@ -44,7 +61,7 @@ const TakeQuiz = () => {
       }
     }
     // Do NOT clearTempQuiz() on unmount here!
-  }, [id, navigate]);
+  }, [id, navigate, location.search]);
 
   useEffect(() => {
     if (timeLeft !== null && timeLeft > 0 && !showNameInput) {
