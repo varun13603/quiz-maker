@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Maker - Create & Share Quizzes</title>
+    <meta name="description" content="Create engaging quizzes and share them with friends. Modern quiz maker with beautiful UI and powerful features." />
+    <!-- GitHub Pages SPA redirect handling -->
+    <script type="text/javascript">
+      (function(l) {
+        const params = new URLSearchParams(l.search);
+        const path = params.get('p');
+        if (path) {
+          // Construct the full path including the basename for react-router
+          const newPath = `/quiz-maker${path}`;
+          window.history.replaceState(null, '', newPath);
+        }
+      }(window.location))
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
