@@ -70,13 +70,11 @@ export const getAttemptsByQuizId = (quizId: string): QuizAttempt[] => {
 };
 
 export const generateShareableLink = (quizId: string): string => {
-  // Check if we're on GitHub Pages
+  // Use hash-based routing for GitHub Pages and local dev
   if (window.location.hostname === 'varun13603.github.io') {
-    // Hardcode the GitHub Pages URL to avoid any caching issues
-    return `https://varun13603.github.io/quiz-maker/quiz/${quizId}`;
+    return `https://varun13603.github.io/quiz-maker/#/quiz/${quizId}`;
   } else {
-    // For local development
-    return `${window.location.origin}/quiz/${quizId}`;
+    return `${window.location.origin}/quiz-maker/#/quiz/${quizId}`;
   }
 };
 
