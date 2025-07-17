@@ -7,6 +7,7 @@ import QuizList from './pages/QuizList';
 import TakeQuiz from './pages/TakeQuiz';
 import QuizResults from './pages/QuizResults';
 import QuizDashboard from './pages/QuizDashboard';
+import SharedQuiz from './pages/SharedQuiz';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<CreateQuiz />} />
           <Route path="/my-quizzes" element={<QuizList />} />
+          <Route path="/quiz/shared" element={<SharedQuiz />} />
           <Route path="/quiz/:id" element={<TakeQuiz />} />
           <Route path="/quiz/:id/results" element={<QuizResults />} />
           <Route path="/quiz/:id/dashboard" element={<QuizDashboard />} />

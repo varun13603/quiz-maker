@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, XCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Quiz, QuizResult, QuizAttempt } from '../types';
-import { getQuizById, saveAttempt } from '../utils/storage';
+import { getQuizById, saveAttempt, getTempQuiz, clearTempQuiz } from '../utils/storage';
 import { calculateScore, formatTime } from '../utils/helpers';
 import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
@@ -21,7 +21,17 @@ const TakeQuiz = () => {
 
   useEffect(() => {
     if (id) {
-      const foundQuiz = getQuizById(id);
+      // First, try to get the quiz from local storage (for quizzes created by the user)
+      let foundQuiz = getQuizById(id);
+      
+      // If not found, check if it's a temporary shared quiz
+      if (!foundQuiz) {
+        const tempQuiz = getTempQuiz();
+        if (tempQuiz && tempQuiz.id === id) {
+          foundQuiz = tempQuiz;
+        }
+      }
+
       if (foundQuiz) {
         setQuiz(foundQuiz);
         setAnswers(new Array(foundQuiz.questions.length).fill(-1));
@@ -29,10 +39,15 @@ const TakeQuiz = () => {
           setTimeLeft(foundQuiz.timeLimit * 60);
         }
       } else {
-        toast.error('Quiz not found');
+        toast.error('Quiz not found or the link is invalid.');
         navigate('/');
       }
     }
+    
+    // Clean up the temporary quiz from session storage when the component unmounts
+    return () => {
+      clearTempQuiz();
+    };
   }, [id, navigate]);
 
   useEffect(() => {
