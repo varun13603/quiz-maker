@@ -9,7 +9,15 @@
     
     <!-- GitHub Pages SPA redirect handling -->
     <script type="text/javascript">
-      // This script is no longer needed with the new 404.html strategy.
+      (function(l) {
+        const params = new URLSearchParams(l.search);
+        const path = params.get('p');
+        if (path) {
+          // Construct the full path including the basename for react-router
+          const newPath = `/quiz-maker${path}`;
+          window.history.replaceState(null, '', newPath);
+        }
+      }(window.location))
     </script>
   </head>
   <body>
