@@ -71,7 +71,10 @@ export const getAttemptsByQuizId = (quizId: string): QuizAttempt[] => {
 
 export const generateShareableLink = (quizId: string): string => {
   const baseUrl = window.location.origin;
-  return `${baseUrl}/quiz/${quizId}`;
+  // Check if we're on GitHub Pages or local development
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  const basePath = isGitHubPages ? '/quiz-maker' : '';
+  return `${baseUrl}${basePath}/quiz/${quizId}`;
 };
 
 export const copyToClipboard = async (text: string): Promise<boolean> => {
